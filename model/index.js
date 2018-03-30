@@ -16,18 +16,18 @@ module.exports = (Sequelize, config)=>
             }
         });
 
-    const workPeriod = require('./workperiod')(Sequelize, sequelize);
+    const like = require('./like')(Sequelize, sequelize);
     const user = require('./user')(Sequelize, sequelize);
-    const team = require('./team')(Sequelize, sequelize);
+    const tweet = require('./tweet')(Sequelize, sequelize);
 
-    user.belongsToMany(team, {through: workPeriod});
-    team.belongsToMany(user, {through: workPeriod});
-
+    like.belongsTo(tweet, {foreignKey: 'tweetId'});
+    like.belongsTo(user, {foreignKey: 'authorId'});
+    tweet.belongsTo(user, {foreignKey: 'authorId'});
 
     return {
-        workPeriod,
+        like,
         user,
-        team,
+        tweet,
         sequelize: sequelize,
         Sequelize: Sequelize
     };

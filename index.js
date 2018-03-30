@@ -11,7 +11,7 @@ async function main()
 {
     const app = express();
 
-    db.sequelize.sync({force: false});
+    db.sequelize.sync({force: true});
 
     app.use(bodyParser.json());
 

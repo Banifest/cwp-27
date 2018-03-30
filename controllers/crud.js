@@ -53,7 +53,7 @@ module.exports = class Crud
     };
     async delete(req, res)
     {
-        res.json(await this.service.deleteById(req.body.id));
+        res.json(await this.service.deleteById(req.params.id));
     };
     registerRouters()
     {

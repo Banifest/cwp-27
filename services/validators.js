@@ -4,20 +4,17 @@ const schemas = {
     'user': Joi.object().keys({
         name: Joi.string().max(50).min(1),
         email: Joi.string().email().max(50).min(1),
-        timezone: Joi.string().max(3).min(1),
-        validated: Joi.boolean(),
-        tel: Joi.string().max(50).min(1),
     }),
 
-    'team': Joi.object().keys({
-        name: Joi.string().max(50).min(1),
-        logo: Joi.string().max(50).min(1),
+    'tweet': Joi.object().keys({
+        message: Joi.string().max(50).min(1),
+        publishedOn: Joi.string().max(50).min(1),
+        authorId: Joi.number()
     }),
 
-    'workPeriod': Joi.object().keys({
-        from: Joi.string().max(50).min(1),
-        to: Joi.string().max(50).min(1),
-        weekDays: Joi.string().max(50).min(1),
+    'like': Joi.object().keys({
+        tweetId: Joi.number(),
+        authorId: Joi.number(),
     }),
 };
 
