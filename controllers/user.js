@@ -6,49 +6,49 @@ class User extends require('./crud')
     {
         super(new (require('../services/user'))());
 
-        this.readAll = async (req, res) =>
+        this.tweetReadAll = async (req, res) =>
         {
-            let answ = await this.service.readAll(req.params.userId);
+            let answ = await this.service.tweetReadAll(req.params.userId);
             res.json(answ);
         };
-        this.read = async (req, res) =>
+        this.tweetRead = async (req, res) =>
         {
-            let answ = await this.service.readById(req.params.userId, req.params.tweetId);
+            let answ = await this.service.tweetRead(req.params.userId, req.params.tweetId);
             res.json(answ);
         };
-        this.paramRead =async (req, res) =>
+        this.tweetParamRead =async (req, res) =>
         {
-            res.json(await this.service.readByOption(req.body));
+            res.json(await this.service.tweetReadByOption(req.body));
         };
 
-        this.create = async (req, res) =>
+        this.tweetCreate = async (req, res) =>
         {
-            res.json(await this.service.create(req.body, req.params.userId));
+            res.json(await this.service.tweetCreate(req.body, req.params.userId));
         };
-        this.update = async (req, res) =>
+
+        this.tweetUpdate = async (req, res) =>
         {
             let id = req.body.id;
             delete req.body.id;
-            res.json(await this.service.updateById( req.params.userId, req.params.tweetId, req.body));
-        };
-        this.delete = async (req, res) =>
-        {
-            res.json(await this.service.deleteById(req.params.userId, req.params.tweetId));
+            res.json(await this.service.tweetUpdate( req.params.userId, req.params.tweetId, req.body));
         };
 
-        this.routers = {
-            '/:userId/tweets/':
-                [
-                    { method: 'get', cb: this.readAll },
-                    { method: 'post', cb: this.create }
-                ],
-            '/:userId/tweets/:tweetId':
-                [
-                    { method: 'get', cb: this.read },
-                    { method: 'put', cb: this.update },
-                    { method: 'delete', cb: this.delete }
-                ],
+        this.tweetDelete = async (req, res) =>
+        {
+            res.json(await this.service.tweetDelete(req.params.userId, req.params.tweetId));
         };
+
+        this.routers['/:userId/tweets/']=
+        [
+            { method: 'get', cb: this.tweetReadAll },
+            { method: 'post', cb: this.tweetCreate }
+        ];
+        this.routers[':userId/tweets/:tweetId'] =
+        [
+            { method: 'get', cb: this.tweetRead },
+            { method: 'put', cb: this.tweetUpdate },
+            { method: 'delete', cb: this.tweetDelete }
+        ];
         this.registerRouters();
     }
 }

@@ -6,8 +6,8 @@ module.exports = () =>
 
     router.use(require('../global-contollers/logger'));
     router.use('/users',require('./user')());
-    router.use('/teams', require('./tweet')());
-    router.use('/work-periods', require('./like')());
+    router.use('/tweets', require('./tweet')());
+    router.use('/likes', require('./like')());
     router.use(require('../global-contollers/error'));
 
     return router;

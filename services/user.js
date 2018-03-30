@@ -6,27 +6,28 @@ module.exports = class User extends require('./crud')
     {
         super(db.user, 'user');
 
-        this.readAll = async (userId) =>
+        this.tweetReadAll = async (userId) =>
         {
             return await this.model.find({where: {authorId: userId}});
         };
-        this.read = async (userId, tId) =>
+        this.tweetRead = async (userId, tId) =>
         {
             if (!isNaN(id) && (await this.model.findById(Number(userId))) != null)
             {
-                return await (await this.model.findOne({where :{authorId: Number(tId)}})).get({plain: true});
+                return await (await this.model.findOne({where :
+                        {authorId: Number(userId), id: tId}})).get({plain: true});
             }
             else
             {
                 throw this.errors.notFound;
             }
         };
-        this.paramRead =async (userId, tId) =>
+        this.tweetParamRead =async (userId, tId) =>
         {
             res.json(await this.service.readByOption(req.body));
         };
 
-        this.create = async (data, userId, tId) =>
+        this.tweetCreate = async (data, userId) =>
         {
             if ((await validators.check(this.validatorName, data)).error)
             {
@@ -38,13 +39,19 @@ module.exports = class User extends require('./crud')
                 return await this.model.create(data);
             }
         };
-        this.update = async (req, res) =>
+        this.tweetUpdate = async (userId, tId, data) =>
         {
-            let id = req.body.id;
-            delete req.body.id;
-            res.json(await this.service.updateById( req.params.userId, req.params.tweetId, req.body));
+            if ((await validators.check(this.validatorName, data)).error)
+            {
+                throw errors.invalidId;
+            }
+            else
+            {
+                await this.model.update(data, {where: {id: tId}});
+                return this.readById(id);
+            }
         };
-        this.delete = async (req, res) =>
+        this.tweetDelete = async (req, res) =>
         {
             res.json(await this.service.deleteById(req.params.userId, req.params.tweetId));
         };
