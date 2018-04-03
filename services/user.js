@@ -1,4 +1,5 @@
 const db = require('../index');
+const validators = require('./validators');
 
 module.exports = class User extends require('./crud')
 {
@@ -8,13 +9,13 @@ module.exports = class User extends require('./crud')
 
         this.tweetReadAll = async (userId) =>
         {
-            return await this.model.find({where: {authorId: userId}});
+            return await db.tweet.find({where: {authorId: userId}});
         };
         this.tweetRead = async (userId, tId) =>
         {
-            if (!isNaN(id) && (await this.model.findById(Number(userId))) != null)
+            if (!isNaN(id) && (await db.tweet.findById(Number(userId))) != null)
             {
-                return await (await this.model.findOne({where :
+                return await (await db.tweet.findOne({where :
                         {authorId: Number(userId), id: tId}})).get({plain: true});
             }
             else
@@ -22,38 +23,47 @@ module.exports = class User extends require('./crud')
                 throw this.errors.notFound;
             }
         };
-        this.tweetParamRead =async (userId, tId) =>
+        this.tweetParamRead = async (userId, tId) =>
         {
             res.json(await this.service.readByOption(req.body));
         };
 
         this.tweetCreate = async (data, userId) =>
         {
-            if ((await validators.check(this.validatorName, data)).error)
+            data['authorId'] = userId;
+            if ((await validators.check('tweet', data)).error)
             {
                 throw this.errors.wrongCredentials;
             }
             else
             {
-                data['authorId'] = userId;
-                return await this.model.create(data);
+                return await db.tweet.create(data);
             }
         };
         this.tweetUpdate = async (userId, tId, data) =>
         {
-            if ((await validators.check(this.validatorName, data)).error)
+            if ((await validators.check('tweet', data)).error)
             {
                 throw errors.invalidId;
             }
             else
             {
-                await this.model.update(data, {where: {id: tId}});
+                await db.tweet.update(data, {where: {id: tId}});
                 return this.readById(id);
             }
         };
-        this.tweetDelete = async (req, res) =>
+        this.likeCreate = async (userId, tId)=>
         {
-            res.json(await this.service.deleteById(req.params.userId, req.params.tweetId));
+            return await db.like.create({authorId: userId, tweetId: tId});
+        };
+
+        this.likeDelete = async (data)=>
+        {
+            return await db.like.destroy({where: {authorId: data.authorId, tweetId: data.tweetId}});
+        };
+        this.tweetDelete = async (userId, tId) =>
+        {
+            return await db.tweet.destroy({where: {authorId: userId, tweetId: tId}});
         };
     }
 };

@@ -6,14 +6,18 @@ module.exports = class WorkPeriod extends require('./crud')
     {
         super(db.like, 'like');
 
-        this.create = async (userId, tId)=>
+        this.likeCreate = async (data)=>
         {
-            return await this.model.create({authorId: userId, tweetId: tId});
+            if(await  db.like.findOne({where: data}))
+            {
+                throw this.errors.invalidId;
+            }
+            return await db.like.create(data);
         };
 
-        this.delete = async (data)=>
+        this.likeDelete = async (data)=>
         {
-            return await this.model.destroy({where: {authorId: data.authorId, tweetId: data.tweetId}});
+            return await db.like.destroy({where: data});
         }
     }
 

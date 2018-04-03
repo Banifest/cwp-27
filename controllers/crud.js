@@ -43,7 +43,7 @@ module.exports = class Crud
     };
     async create(req, res)
     {
-        res.json(await this.service.tweetCreate(req.body));
+        res.json(await this.service.create(req.body));
     };
     async update(req, res)
     {

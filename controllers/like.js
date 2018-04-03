@@ -1,30 +1,30 @@
 const sequelize = require('sequelize');
 
-class WorkPeriod extends require('./crud')
+class Like extends require('./crud')
 {
     constructor()
     {
         super(new (require('../services/like'))());
 
-        this.tweetCreate = async (req, res) =>
+        this.likeCreate = async (req, res) =>
         {
             req.body['authorId'] = req.params.userId;
             req.body['tweetId'] = req.params.tweetId;
-            res.json(await this.service.tweetCreate(req.body));
+            res.json(await this.service.likeCreate(req.body));
         };
 
-        this.tweetDelete = async (req, res) =>
+        this.likeDelete = async (req, res) =>
         {
             req.body['authorId'] = req.params.userId;
             req.body['tweetId'] = req.params.tweetId;
-            res.json(await this.service.tweetDelete(req.body));
+            res.json(await this.service.likeDelete(req.body));
         };
 
         this.routers = {
             '/users/:userId/tweets/:tweetId':
             [
-                { method: 'post', cb: this.tweetCreate },
-                { method: 'delete', cb: this.tweetDelete }
+                { method: 'post', cb: this.likeCreate },
+                { method: 'delete', cb: this.likeDelete }
             ],
 
         };
@@ -34,5 +34,5 @@ class WorkPeriod extends require('./crud')
 
 module.exports = (settings)=>
 {
-    return (new WorkPeriod()).router;
+    return (new Like()).router;
 };

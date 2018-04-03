@@ -49,6 +49,7 @@ class User extends require('./crud')
             { method: 'put', cb: this.tweetUpdate },
             { method: 'delete', cb: this.tweetDelete }
         ];
+
         this.registerRouters();
     }
 }
